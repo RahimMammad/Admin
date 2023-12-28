@@ -1,5 +1,5 @@
 import UserModel from "../models/UserModel.js";
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
 
 export const getUsers = async (req, res) => {
@@ -23,17 +23,19 @@ export const getUserById = async (req, res) => {
 export const signUpUser = async (req, res) => {
     try {
         const {firstname, lastname, email, password} = req.query
-        const existedUser = await UserModel.findOne({email})
+        const existedUser = await UserModel.findOne({ email })
         if(existedUser) {
             res.status(409).send({msg: "User exists!"})
         }
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new UserModel({
             firstname, lastname, email, password: hashedPassword, role: "user"
-        });
-        await newUser.save();
-        const token = jwt.sign({ email: newUser.email, role: newUser.role }, "secretKey", { expiresIn: "7d" })
-        console.log(token);
+        })
+        console.log('1')
+        await newUser.save()
+        console.log('2')
+        // const token = jwt.sign({ email: newUser.email, role: newUser.role }, "secretKey", { expiresIn: "7d" })
+        // console.log(token);
         res.status(200).send({msg: `User ${firstname} ${lastname} is created!`})
     } catch (error) {
         res.status(500).send(error)

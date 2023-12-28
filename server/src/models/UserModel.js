@@ -6,7 +6,7 @@ const UserModel = new mongoose.Schema(
         lastname: { type: String, required: true, maxLength: 255 },
         email: { type: String, unique: true, lowercase: true, required: true, trim: true },
         password: { type: String, required: true, minLength: 8 },
-        role: { type: String, required: true }
+        role: { type: String, default: "user" }
     },
     { timestamps: true }
 )
