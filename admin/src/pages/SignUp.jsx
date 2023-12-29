@@ -1,11 +1,9 @@
-import React, { useContext, useState } from 'react'
-import { jwtDecode } from "jwt-decode"
-import { UserContext } from '../context/UserContext'
-import { Link, useNavigate } from "react-router-dom"
-import axios from "axios"
+import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
-    const { token, setToken, setUser } = useContext(UserContext);
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
@@ -27,19 +25,23 @@ const SignUp = () => {
             lastname: lastname,
             email: email,
             password: password
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json'
-            }
           });
-          console.log(response);
-          const token = response.data
-          const decoded = jwtDecode(token)
-          setUser(decoded)
-          setToken(token)
-          navigate("/profile")
+          const userId = response.data._id.toString();
+          console.log(response.data);
+          navigate(`/profile/${userId}`)
+
+          Swal.fire({
+            title: "Great!",
+            text: `${firstname} ${lastname} successfully added!`,
+            icon: "success"
+          });
         } catch (error) {
+          
+          Swal.fire({
+            title: "Oops...",
+            icon: "error",
+            text: "Something went wrong!",
+          });
           console.log(error);
         }
     }

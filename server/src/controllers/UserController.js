@@ -22,7 +22,7 @@ export const getUserById = async (req, res) => {
 
 export const signUpUser = async (req, res) => {
     try {
-        const {firstname, lastname, email, password} = req.query
+        const {firstname, lastname, email, password} = req.body
         const existedUser = await UserModel.findOne({ email })
         if(existedUser) {
             res.status(409).send({msg: "User exists!"})
@@ -31,14 +31,11 @@ export const signUpUser = async (req, res) => {
         const newUser = new UserModel({
             firstname, lastname, email, password: hashedPassword, role: "user"
         })
-        console.log('1')
+        console.log(newUser)
         await newUser.save()
-        console.log('2')
-        // const token = jwt.sign({ email: newUser.email, role: newUser.role }, "secretKey", { expiresIn: "7d" })
-        // console.log(token);
         res.status(200).send({msg: `User ${firstname} ${lastname} is created!`})
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error.message)
     }
 }
 

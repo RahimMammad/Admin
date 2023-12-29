@@ -4,7 +4,7 @@ import { deleteUser, getUserById, getUsers, signInUser, signUpUser, updateUser }
 const userRouter = express.Router()
 
 userRouter.get("/", getUsers)
-userRouter.get("/:id", getUserById)
+userRouter.get("/profile/:id", getUserById)
 userRouter.post("/signup", signUpUser)
 userRouter.post("/signin", signInUser)
 userRouter.put("/:id", updateUser)
